@@ -1,7 +1,11 @@
 package com.example.URL_shortener.controller;
 
 import com.example.URL_shortener.model.Account;
+import com.example.URL_shortener.model.URL;
+import com.example.URL_shortener.response.RegisterErrorReponse;
+import com.example.URL_shortener.service.AccountService;
 import com.example.URL_shortener.service.AuthorizationService;
+import com.example.URL_shortener.service.AuthorizationServiceImpl;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +19,8 @@ public class URLshorteningController {
     }
 
     @GetMapping("/short")
-    public boolean shortenURL(@RequestHeader String authorization) {
+    public URL shortenURL(@RequestHeader String authorization, @RequestBody URL url) {
+        // REQUEST HEADER
         // dekripcija tokena
         String encodedAuthorization = authorization.substring(6).trim();
         String decodedAuthorization = new String(Base64.decodeBase64(encodedAuthorization));
@@ -25,10 +30,12 @@ public class URLshorteningController {
         Account account = authorizationService.checkAuthorization(credentials[0], credentials[1]);
         if (account == null) {
             // TODO
-            // throw new AuthorizationErrorReponse("You are not authorized to shorten this URL");
-            return false;
+            throw new RuntimeException("You are not authorized to shorten this URL");
         }
 
-        return true;
+        // REQUEST BODY
+
+
+        return url;
     }
 }
