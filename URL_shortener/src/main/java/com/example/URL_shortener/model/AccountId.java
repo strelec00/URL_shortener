@@ -11,7 +11,8 @@ public class AccountId {
         this.accountId = accountId;
     }
 
-    public AccountId() {
+    public AccountId(){
+
     }
 
     public AccountId(String accountId) {

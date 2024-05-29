@@ -28,7 +28,6 @@ public class AccountController {
         if(accountService.findAccountById(accountId.getAccountId())){
             throw new RegisterErrorReponse(accountId.getAccountId());
         }
-
         Account account = new Account();
         account.setAccountId(accountId.getAccountId());
 
