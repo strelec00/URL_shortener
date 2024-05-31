@@ -1,4 +1,4 @@
-package com.example.URL_shortener.response;
+package com.example.URL_shortener.responses;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

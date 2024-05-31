@@ -1,10 +1,10 @@
 package com.example.URL_shortener.controller;
 
-import com.example.URL_shortener.model.Account;
-import com.example.URL_shortener.model.AccountId;
-import com.example.URL_shortener.response.RegisterErrorReponse;
-import com.example.URL_shortener.response.RegisterResponse;
-import com.example.URL_shortener.service.AccountService;
+import com.example.URL_shortener.models.Account;
+import com.example.URL_shortener.models.AccountId;
+import com.example.URL_shortener.exceptions.RegisterErrorException;
+import com.example.URL_shortener.responses.RegisterResponse;
+import com.example.URL_shortener.services.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class AccountController {
 
         // Throw exc if accountId already exists
         if(accountService.findAccountById(accountId.getAccountId())){
-            throw new RegisterErrorReponse(accountId.getAccountId());
+            throw new RegisterErrorException("");
         }
         Account account = new Account();
         account.setAccountId(accountId.getAccountId());
@@ -40,7 +40,7 @@ public class AccountController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<RegisterResponse> handleException(RegisterErrorReponse e) {
+    public ResponseEntity<RegisterResponse> handleException(RegisterErrorException e) {
         RegisterResponse error = new RegisterResponse(false, "Account ID already exists!");
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }

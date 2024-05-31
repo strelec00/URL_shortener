@@ -1,4 +1,4 @@
-package com.example.URL_shortener.model;
+package com.example.URL_shortener.models;
 
 public class AccountId {
     private String accountId;
