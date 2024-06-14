@@ -1,14 +1,12 @@
 package com.example.URL_shortener.controller;
-
-import com.example.URL_shortener.exceptions.AuthorizationErrorException;
-import com.example.URL_shortener.exceptions.RedirectTypeException;
-import com.example.URL_shortener.exceptions.URLIsNullException;
+import com.example.URL_shortener.exceptions.*;
 import com.example.URL_shortener.models.Account;
 import com.example.URL_shortener.models.URL;
 import com.example.URL_shortener.models.URLrequest;
 import com.example.URL_shortener.responses.ShortUrlResponse;
 import com.example.URL_shortener.services.AccountService;
 import com.example.URL_shortener.services.URLshorteningService;
+import jakarta.validation.Valid;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,16 +25,27 @@ public class URLshorteningController {
         this.urlshorteningService = urlshorteningService;
     }
 
-    @PostMapping("/short")
-    public ResponseEntity<ShortUrlResponse> shortenURL(@RequestHeader String authorization, @RequestBody URLrequest url) {
+
+    @PostMapping(value = "/short", headers = "Authorization", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<ShortUrlResponse> shortenURL(@RequestHeader String authorization, @Valid @RequestBody URLrequest url) {
+
         ShortUrlResponse shortUrlResponse = new ShortUrlResponse();
+
+        urlshorteningService.getRedirectType(url.getRedirectType(), url);
+
         // REQUEST HEADER
-        // dekripcija tokena
+
+        // Decoding
         String encodedAuthorization = authorization.substring(6).trim();
-        String decodedAuthorization = new String(Base64.decodeBase64(encodedAuthorization));
+        String decodedAuthorization = new String(Base64 .decodeBase64(encodedAuthorization));
         String[] credentials = decodedAuthorization.split(":");
 
-        // provjera autorizacije
+        // error handling - password empty
+        if (credentials.length != 2 || !authorization.startsWith("Basic ")) {
+            throw new HeaderErrorException("Invalid Authorization header value");
+        }
+
+        // error handling - provjera autorizacije
         Account account = accountService.checkAuthorization(credentials[0], credentials[1]);
         if (account == null) {
            throw new AuthorizationErrorException("You are not authorized to have access to URL shortening");
@@ -54,29 +63,6 @@ public class URLshorteningController {
         Integer redirectType = url.getRedirectType();
 
         return new ResponseEntity<>(shortUrlResponse, HttpStatus.valueOf(redirectType)  );
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ShortUrlResponse> handleAuthorizationErrorException(AuthorizationErrorException e) {
-        ShortUrlResponse error = new ShortUrlResponse();
-        error.setDescription(e.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(RedirectTypeException.class)
-    public ResponseEntity<ShortUrlResponse> handleException(RedirectTypeException ex) {
-        ShortUrlResponse shortUrlResponse = new ShortUrlResponse();
-        shortUrlResponse.setDescription(ex.getMessage());
-
-        return new ResponseEntity<>(shortUrlResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(URLIsNullException.class)
-    public ResponseEntity<ShortUrlResponse> handleException(URLIsNullException ex) {
-        ShortUrlResponse shortUrlResponse = new ShortUrlResponse();
-        shortUrlResponse.setDescription(ex.getMessage());
-
-        return new ResponseEntity<>(shortUrlResponse, HttpStatus.BAD_REQUEST);
     }
 
 

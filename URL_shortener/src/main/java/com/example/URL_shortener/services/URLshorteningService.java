@@ -9,5 +9,7 @@ public interface URLshorteningService{
 
     ShortUrlResponse generateURL(URLrequest url);
 
-    public void addURL(URL url);
+    void addURL(URL url);
+
+    void getRedirectType(Integer redirectType, URLrequest url);
 }

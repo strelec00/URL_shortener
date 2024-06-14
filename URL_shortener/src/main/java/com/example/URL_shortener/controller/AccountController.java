@@ -5,6 +5,7 @@ import com.example.URL_shortener.models.AccountId;
 import com.example.URL_shortener.exceptions.RegisterErrorException;
 import com.example.URL_shortener.responses.RegisterResponse;
 import com.example.URL_shortener.services.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +22,12 @@ public class AccountController {
     }
 
     // add acc
-    @PostMapping("/register")
-    public RegisterResponse registerAccount(@RequestBody AccountId accountId) {
+    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
+    public RegisterResponse registerAccount(@Valid @RequestBody AccountId accountId) {
 
         // Throw exc if accountId already exists
         if(accountService.findAccountById(accountId.getAccountId())){
-            throw new RegisterErrorException("");
+            throw new RegisterErrorException("Account ID already exists!");
         }
         Account account = new Account();
         account.setAccountId(accountId.getAccountId());
@@ -39,9 +40,9 @@ public class AccountController {
         return new RegisterResponse(true,account.getPassword());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(RegisterErrorException.class)
     public ResponseEntity<RegisterResponse> handleException(RegisterErrorException e) {
-        RegisterResponse error = new RegisterResponse(false, "Account ID already exists!");
+        RegisterResponse error = new RegisterResponse(false, e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 }

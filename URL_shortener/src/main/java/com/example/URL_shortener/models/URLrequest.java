@@ -1,13 +1,18 @@
 package com.example.URL_shortener.models;
-
-
-import com.example.URL_shortener.exceptions.RedirectTypeException;
-import com.example.URL_shortener.exceptions.URLIsNullException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class URLrequest {
+
+    @NotNull(message = "URL cannot be null!")
+    @Pattern(regexp = "^(http|https)://.*$", message = "URL must have http or https")
+    @Size(min = 12, max = 240, message = "Invalid Name: Must be of 12 - 240 characters")
     private String url;
+
     private Integer redirectType;
 
     public URLrequest() {
@@ -17,16 +22,7 @@ public class URLrequest {
 
     @JsonCreator
     public URLrequest(@JsonProperty("url") String url, @JsonProperty("redirectType") Integer redirectType) {
-        if (redirectType == null) {
-            this.redirectType = 302;
-        } else if (redirectType != 302 && redirectType != 301) {
-            throw new RedirectTypeException("RedirectType can ONLY be 301 | 302");
-        } else {
-            this.redirectType = redirectType;
-        }
-        if (url == null || url.isEmpty()) {
-            throw new URLIsNullException("URL cannot be null");
-        }
+        this.redirectType = redirectType;
         this.url = url;
     }
 
@@ -38,7 +34,7 @@ public class URLrequest {
         this.url = url;
     }
 
-    public int getRedirectType() {
+    public Integer getRedirectType() {
         return redirectType;
     }
 
