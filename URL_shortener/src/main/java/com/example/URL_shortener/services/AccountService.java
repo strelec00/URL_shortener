@@ -1,6 +1,6 @@
-package com.example.URL_shortener.service;
+package com.example.URL_shortener.services;
 
-import com.example.URL_shortener.model.Account;
+import com.example.URL_shortener.models.Account;
 
 
 public interface AccountService {
@@ -9,4 +9,7 @@ public interface AccountService {
     String generateRandomPassword(int length);
 
     Boolean findAccountById(String accountId);
+
+    Account checkAuthorization(String accountId, String password);
+
 }
