@@ -2,6 +2,8 @@ package com.example.URL_shortener.services;
 
 import com.example.URL_shortener.models.Account;
 
+import java.util.Map;
+
 
 public interface AccountService {
     void createAccount(Account account);
