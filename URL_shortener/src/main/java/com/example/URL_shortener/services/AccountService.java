@@ -12,4 +12,6 @@ public interface AccountService {
 
     Account checkAuthorization(String accountId, String password);
 
+    String[] authenticate(String authorization);
+
 }
