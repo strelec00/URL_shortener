@@ -43,7 +43,7 @@ public class URLshorteningServiceImpl implements URLshorteningService {
     }
 
     @Override
-    public ShortUrlResponse generateURL(URLrequest url) {
+    public ShortUrlResponse generateShortURL(URLrequest url) {
 
         ShortUrlResponse response = new ShortUrlResponse();
         String hash = generateRandomHash(4);
@@ -54,6 +54,12 @@ public class URLshorteningServiceImpl implements URLshorteningService {
         response.setShortUrl(shortUrl);
 
         return response;
+    }
+
+    @Override
+    public String generateURL() {
+        String generatedUrl =  scheme + "://" + serverAddress + ":" + port + contextPath + "/";
+        return generatedUrl;
     }
 
     public void addURL(URL url) {
@@ -84,6 +90,10 @@ public class URLshorteningServiceImpl implements URLshorteningService {
         return map;
     }
 
+    @Override
+    public URL getURLbyShortUrl(String shortUrl) {
+        return restRepositoryURL.findByShortenedUrl(shortUrl);
+    }
 
 
 }

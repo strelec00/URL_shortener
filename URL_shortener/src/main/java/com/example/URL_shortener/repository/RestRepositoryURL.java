@@ -7,4 +7,7 @@ import java.util.List;
 @Repository
 public interface RestRepositoryURL extends JpaRepository<URL, Long> {
     List<URL> findAllByAccountId(String accountId);
+
+    URL findByShortenedUrl(String shortUrl);
+
 }

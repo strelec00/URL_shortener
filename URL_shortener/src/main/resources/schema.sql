@@ -9,5 +9,7 @@ CREATE TABLE url (
                       accountId varchar(255) not null ,
                       url VARCHAR(255) NOT NULL,
                       shortened_url VARCHAR(100) NOT NULL UNIQUE ,
+                        redirectType INTEGER NOT NULL ,
                       FOREIGN KEY (accountId) REFERENCES account(accountId)
 );
+

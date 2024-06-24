@@ -33,12 +33,13 @@ public class URLshorteningController {
         String[] credentials =  accountService.authenticate(authorization);
 
 
-        shortUrlResponse = urlshorteningService.generateURL(url);
+        shortUrlResponse = urlshorteningService.generateShortURL(url);
 
         URL urlBase = new URL();
         urlBase.setAccountId(credentials[0]);
         urlBase.setUrl(url.getUrl());
         urlBase.setShortenedUrl(shortUrlResponse.getShortUrl());
+        urlBase.setRedirectType(url.getRedirectType());
 
         urlshorteningService.addURL(urlBase);
 
