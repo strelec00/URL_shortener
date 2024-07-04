@@ -4,14 +4,20 @@ import com.example.URL_shortener.models.URL;
 import com.example.URL_shortener.models.URLrequest;
 import com.example.URL_shortener.repository.RestRepositoryURL;
 import com.example.URL_shortener.responses.ShortUrlResponse;
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class URLshorteningServiceImpl implements URLshorteningService {
 
     private final RestRepositoryURL repositoryURL;
+    private final RestRepositoryURL restRepositoryURL;
 
     @Value("${server.address:localhost}")
     private String serverAddress;
@@ -26,8 +32,9 @@ public class URLshorteningServiceImpl implements URLshorteningService {
     private String contextPath;
 
 
-    public URLshorteningServiceImpl(RestRepositoryURL repositoryURL) {
+    public URLshorteningServiceImpl(RestRepositoryURL repositoryURL, RestRepositoryURL restRepositoryURL) {
         this.repositoryURL = repositoryURL;
+        this.restRepositoryURL = restRepositoryURL;
     }
 
     @Override
@@ -36,7 +43,7 @@ public class URLshorteningServiceImpl implements URLshorteningService {
     }
 
     @Override
-    public ShortUrlResponse generateURL(URLrequest url) {
+    public ShortUrlResponse generateShortURL(URLrequest url) {
 
         ShortUrlResponse response = new ShortUrlResponse();
         String hash = generateRandomHash(4);
@@ -47,6 +54,12 @@ public class URLshorteningServiceImpl implements URLshorteningService {
         response.setShortUrl(shortUrl);
 
         return response;
+    }
+
+    @Override
+    public String generateURL() {
+        String generatedUrl =  scheme + "://" + serverAddress + ":" + port + contextPath + "/";
+        return generatedUrl;
     }
 
     public void addURL(URL url) {
@@ -63,6 +76,23 @@ public class URLshorteningServiceImpl implements URLshorteningService {
             url.setRedirectType(url.getRedirectType());
         }
 
+    }
+
+    @Override
+    public Map<String, Integer> findAllByAccountId(String accountId) {
+        List<URL> urls = repositoryURL.findAllByAccountId(accountId);
+        Map<String, Integer> map = new HashMap<>();
+        Integer count = 0;
+        for (URL url : urls) {
+            String urlString = url.getUrl();
+            map.put(urlString, map.getOrDefault(urlString, 0) + 1);
+        }
+        return map;
+    }
+
+    @Override
+    public URL getURLbyShortUrl(String shortUrl) {
+        return restRepositoryURL.findByShortenedUrl(shortUrl);
     }
 
 
