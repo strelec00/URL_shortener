@@ -45,6 +45,10 @@ public class URLshorteningController {
 
         Integer redirectType = url.getRedirectType();
 
+        if (shortUrlResponse.getShortUrl() == null && shortUrlResponse.getDescription() == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(shortUrlResponse);
+        }
+
         return new ResponseEntity<>(shortUrlResponse, HttpStatus.valueOf(redirectType)  );
     }
 

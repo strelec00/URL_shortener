@@ -6,8 +6,6 @@ import com.example.URL_shortener.exceptions.RegisterErrorException;
 import com.example.URL_shortener.responses.RegisterResponse;
 import com.example.URL_shortener.services.AccountService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -37,13 +35,9 @@ public class AccountController {
 
         accountService.createAccount(account);
 
-        return new RegisterResponse(true,account.getPassword());
+        return new RegisterResponse(account.getPassword(),true);
     }
 
-    @ExceptionHandler(RegisterErrorException.class)
-    public ResponseEntity<RegisterResponse> handleException(RegisterErrorException e) {
-        RegisterResponse error = new RegisterResponse(false, e.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
+
 }
 

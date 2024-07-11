@@ -38,7 +38,6 @@ public class AccountServiceImpl implements AccountService {
     public Boolean findAccountById(String accountId) {
         return restRepository.findById(accountId).isPresent();
     }
-
     @Override
     public Account checkAuthorization(String accountId, String password) {
         return restRepository.findByAccountIdAndPassword(accountId,password);
@@ -48,19 +47,23 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String[] authenticate(String authorization) {
 
+        if (!authorization.startsWith("Basic ")) {
+            throw new HeaderErrorException("Invalid Authorization header value");
+        }
+
         String encodedAuthorization = authorization.substring(6).trim();
         String decodedAuthorization = new String(Base64.decodeBase64(encodedAuthorization));
         String[] credentials = decodedAuthorization.split(":");
 
         // error handling - password empty
-        if (credentials.length != 2 || !authorization.startsWith("Basic ")) {
+        if (credentials.length != 2) {
             throw new HeaderErrorException("Invalid Authorization header value");
         }
 
         // error handling - provjera autorizacije
         Account account = checkAuthorization(credentials[0], credentials[1]);
-        if (account == null) {
-            throw new AuthorizationErrorException("You are not authorized to have access to URL shortening");
+        if (account == null ) {
+                throw new AuthorizationErrorException("You are not authorized to have access to URL shortening");
         }
 
         return credentials;

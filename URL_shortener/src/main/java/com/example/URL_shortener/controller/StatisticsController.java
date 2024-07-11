@@ -1,7 +1,6 @@
 package com.example.URL_shortener.controller;
 import com.example.URL_shortener.services.AccountService;
 import com.example.URL_shortener.services.URLshorteningService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
