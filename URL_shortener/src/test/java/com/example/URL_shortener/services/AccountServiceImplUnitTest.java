@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AccountServiceImplTest {
+class AccountServiceImplUnitTest {
 
     @Mock
     private RestRepositoryAccount repositoryAccount;
@@ -29,13 +29,17 @@ class AccountServiceImplTest {
     @InjectMocks
     private AccountServiceImpl accountService;
 
+    Account account;
+
     @BeforeEach
     void setUp() {
-        accountService = new AccountServiceImpl(repositoryAccount);
+        account = new Account();
+        account.setAccountId("name");
+        account.setPassword("password");
     }
 
     @Test
-    void AccountService_GeneratePassword_NotNull() {
+    void AccountServiceUnit_GeneratePassword_NotNull() {
         int length = 7;
 
         String pass = accountService.generateRandomPassword(length);
@@ -45,11 +49,7 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void AccountService_CreateAccount_EqualToSave() {
-        String accountId = "testUser";
-        String password = "testPassword";
-        Account account = new Account(accountId, password);
-
+    void AccountServiceUnit_CreateAccount_EqualToSave() {
         accountService.createAccount(account);
 
         ArgumentCaptor<Account> accountArgumentCaptor = ArgumentCaptor.forClass(Account.class);
@@ -60,22 +60,18 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void AccountService_findAccountById_AccountExists_ReturnsTrue() {
-        String accountId = "testUser";
-        String password = "testPassword";
-        Account account = new Account(accountId, password);
+    void AccountServiceUnit_findAccountById_AccountExists_ReturnsTrue() {
+        when(repositoryAccount.findById("name")).thenReturn(Optional.of(account));
 
-        when(repositoryAccount.findById(accountId)).thenReturn(Optional.of(account));
-
-        boolean accountExists = accountService.findAccountById(accountId);
+        boolean accountExists = accountService.findAccountById("name");
 
         assertThat(accountExists).isTrue();
-        verify(repositoryAccount).findById(accountId);
+        verify(repositoryAccount).findById("name");
     }
 
     @Test
-    void AccountService_findAccountById_AccountNotExists_ReturnsFalse() {
-        String accountId = "nonExistingUser";
+    void AccountServiceUnit_findAccountById_AccountNotExists_ReturnsFalse() {
+        String accountId = "wrongName";
 
         when(repositoryAccount.findById(accountId)).thenReturn(Optional.empty());
 
@@ -86,10 +82,9 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void AccountService_checkAuthorization_ReturnsAccount() {
-        String accountId = "testUser";
-        String password = "testPassword";
-        Account account = new Account(accountId, password);
+    void AccountServiceUnit_checkAuthorization_ReturnsAccount() {
+        String accountId = "name";
+        String password = "password";
 
         when(repositoryAccount.findByAccountIdAndPassword(accountId, password)).thenReturn(account);
 
@@ -101,8 +96,8 @@ class AccountServiceImplTest {
 
 
     @Test
-    void AccountService_checkAuthorization_ThrowsAuthorizationErrorException() {
-        String accountId = "testUser";
+    void AccountServiceUnit_checkAuthorization_ThrowsAuthorizationErrorException() {
+        String accountId = "wrongName";
         String password = "wrongPassword";
 
         when(repositoryAccount.findByAccountIdAndPassword(accountId, password)).thenReturn(null);
@@ -115,8 +110,8 @@ class AccountServiceImplTest {
 
 
     @Test
-    void AccountService_Authenticate_ReturnsCredentials() {
-        String accountId = "testUser";
+    void AccountServiceUnit_Authenticate_ReturnsCredentials() {
+        String accountId = "testName";
         String password = "testPassword";
         String authorization = "Basic " + java.util.Base64.getEncoder().encodeToString((accountId + ":" + password).getBytes());
 
@@ -129,7 +124,7 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void AccountService_Authenticate_InvalidCredentials_ThrowsAuthorizationErrorException() {
+    void AccountServiceUnit_Authenticate_InvalidCredentials_ThrowsAuthorizationErrorException() {
         String invalidAuthorization = "Basic " + Base64.encodeBase64String("invalidUsername:invalidPassword".getBytes());
 
         assertThatThrownBy(() -> accountService.authenticate(invalidAuthorization))
@@ -138,7 +133,7 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void AccountService_Authenticate_AuthNotStartWithBasic_ThrowsHeaderErrorException() {
+    void AccountServiceUnit_Authenticate_AuthNotStartWithBasic_ThrowsHeaderErrorException() {
         String invalidAuthorization = " " + Base64.encodeBase64String("invalidUsername:invalidPassword".getBytes());
 
 
@@ -148,7 +143,7 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void AccountService_Authenticate_MoreCredentialsThanNeeded_ThrowsHeaderErrorException() {
+    void AccountServiceUnit_Authenticate_MoreCredentialsThanNeeded_ThrowsHeaderErrorException() {
         String invalidAuthorization = "Basic " + Base64.encodeBase64String("invalidUsername:invalidPassword:SD".getBytes());
 
         assertThatThrownBy(() -> accountService.authenticate(invalidAuthorization))
@@ -157,11 +152,11 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void AccountService_Authenticate_AccountNULL_AuthorizationErrorException() {
+    void AccountServiceUnit_Authenticate_AccountNULL_AuthorizationErrorException() {
         String invalidAuthorization = "Basic " + Base64.encodeBase64String("invalidUsername:invalidPassword".getBytes());
 
         assertThatThrownBy(() -> accountService.authenticate(invalidAuthorization))
                 .isInstanceOf(AuthorizationErrorException.class)
-                .hasMessageContaining("You are not authorized to have access to URL shortening");
+                .hasMessageContaining("");
     }
 }

@@ -24,8 +24,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class URLshorteningServiceImplTest {
-
+class URLshorteningServiceImplUnitTest {
 
     @Mock
     private RestRepositoryURL restRepositoryURL;
@@ -39,7 +38,7 @@ class URLshorteningServiceImplTest {
     }
 
     @Test
-    void ShorteningService_GenerateRandomHash_IsNotNULL() {
+    void ShorteningServiceUnit_GenerateRandomHash_IsNotNULL() {
         int length = 7;
 
         String hash = urlshorteningService.generateRandomHash(length);
@@ -49,29 +48,29 @@ class URLshorteningServiceImplTest {
     }
 
     @Test
-    void ShorteningService_GenerateShortURL_IsNotNULL() {
+    void ShorteningServiceUnit_GenerateShortURL_IsNotNULL() {
         String url = "www.google.com";
         Integer redirectType = 302;
 
         URLrequest urlRequest = new URLrequest(url, redirectType);
 
-
         ShortUrlResponse response = urlshorteningService.generateShortURL(urlRequest);
 
+        assertThat(response).isNotNull();
         assertThat(response.getShortUrl()).isNotNull();
-        assertThat(response.getShortUrl().contains("://")).isEqualTo(true);
+        assertThat(response.getShortUrl().contains("://")).isTrue();
     }
 
     @Test
-    void ShorteningService_GenerateURL_IsNotNULL() {
+    void ShorteningServiceUnit_GenerateURL_IsNotNULL() {
         String generatedUrl = urlshorteningService.generateURL();
 
         assertThat(generatedUrl).isNotNull();
-        assertThat(generatedUrl.contains("://")).isEqualTo(true);
+        assertThat(generatedUrl.contains("://")).isTrue();
     }
 
     @Test
-    void ShorteningService_AddURL_returnURL() {
+    void ShorteningServiceUnit_AddURL_returnURL() {
         String accountId = "test_account";
         String url = "www.example.com/trail/bake/31309";
         String shortenedUrl = "abcd";
@@ -89,7 +88,7 @@ class URLshorteningServiceImplTest {
     }
 
     @Test
-    void ShorteningService_getRedirectType_validRedirectType() {
+    void ShorteningServiceUnit_GetRedirectType_ValidRedirectType() {
         URLrequest urlRequest = new URLrequest("www.example.com", 301);
 
         urlshorteningService.getRedirectType(urlRequest.getRedirectType(), urlRequest);
@@ -98,7 +97,7 @@ class URLshorteningServiceImplTest {
     }
 
     @Test
-    void ShorteningService_getRedirectType_nullRedirectType() {
+    void ShorteningServiceUnit_GetRedirectType_NullRedirectType() {
         URLrequest urlRequest = new URLrequest("www.example.com", null);
 
         urlshorteningService.getRedirectType(urlRequest.getRedirectType(), urlRequest);
@@ -107,7 +106,7 @@ class URLshorteningServiceImplTest {
     }
 
     @Test
-    void ShorteningService_getRedirectType_invalidRedirectType() {
+    void ShorteningServiceUnit_GetRedirectType_InvalidRedirectType() {
         URLrequest urlRequest = new URLrequest("www.example.com", 303);
 
         assertThatThrownBy(() -> urlshorteningService.getRedirectType(urlRequest.getRedirectType(), urlRequest))
@@ -116,7 +115,7 @@ class URLshorteningServiceImplTest {
     }
 
     @Test
-    void ShorteningService_findAllByAccountId_validAccountId() {
+    void ShorteningServiceUnit_FindAllByAccountId_ValidAccountId() {
         String accountId = "test_account";
         URL url1 = new URL(accountId, "www.example.com", "abcd", 301);
         URL url3 = new URL(accountId, "www.example.com", "lmkr", 301);
@@ -133,7 +132,7 @@ class URLshorteningServiceImplTest {
     }
 
     @Test
-    void ShorteningService_findAllByAccountId_InvalidAccountId() {
+    void ShorteningServiceUnit_FindAllByAccountId_InvalidAccountId() {
         String accountId = "test_account";
 
         when(restRepositoryURL.findAllByAccountId(accountId)).thenReturn(Collections.emptyList());
@@ -142,9 +141,9 @@ class URLshorteningServiceImplTest {
 
         assertThat(urlCounts).isEmpty();
     }
-    
+
     @Test
-    void ShorteningService_getURLbyShortUrl_validShortUrl() {
+    void ShorteningServiceUnit_GetURLbyShortUrl_ValidShortUrl() {
         String shortUrl = "abcd";
         URL url = new URL("test_account", "www.example.com", shortUrl, 301);
 
@@ -157,8 +156,8 @@ class URLshorteningServiceImplTest {
     }
 
     @Test
-    void ShorteningService_getURLbyShortUrl_InvalidShortUrl() {
-        String shortUrl = "abcd";
+    void ShorteningServiceUnit_GetURLbyShortUrl_InvalidShortUrl() {
+        String shortUrl = "wrongShortUrl";
 
         when(restRepositoryURL.findByShortenedUrl(shortUrl)).thenReturn(null);
 

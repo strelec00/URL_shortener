@@ -82,4 +82,5 @@ public class GlobalUrlExceptionHandler {
     public ResponseEntity<String> handleURLnotFound(URLnotFoundException e) {
         return new ResponseEntity<>("URL not found", HttpStatus.NOT_FOUND);
     }
+
 }
