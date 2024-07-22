@@ -4,6 +4,7 @@ import com.example.URL_shortener.exceptions.AuthorizationErrorException;
 import com.example.URL_shortener.exceptions.HeaderErrorException;
 import com.example.URL_shortener.models.Account;
 import com.example.URL_shortener.repository.RestRepositoryAccount;
+import jakarta.transaction.Transactional;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
+@Transactional
 class AccountServiceImplIntegrationTest {
 
     @Autowired
@@ -126,8 +128,8 @@ class AccountServiceImplIntegrationTest {
         String invalidAuthorization = " " + Base64.encodeBase64String("invalidUsername:invalidPassword".getBytes());
 
         assertThatThrownBy(() -> accountService.authenticate(invalidAuthorization))
-                .isInstanceOf(HeaderErrorException.class)
-                .hasMessageContaining("Invalid Authorization header value");
+                .isInstanceOf(AuthorizationErrorException.class)
+                .hasMessageContaining("This is not a valid authorization");
     }
 
     @Test

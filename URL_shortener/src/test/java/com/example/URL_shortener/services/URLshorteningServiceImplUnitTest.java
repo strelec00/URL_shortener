@@ -5,6 +5,7 @@ import com.example.URL_shortener.models.URL;
 import com.example.URL_shortener.models.URLrequest;
 import com.example.URL_shortener.repository.RestRepositoryURL;
 import com.example.URL_shortener.responses.ShortUrlResponse;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
+@Transactional
 class URLshorteningServiceImplUnitTest {
 
     @Mock

@@ -26,7 +26,7 @@ public class GlobalUrlExceptionHandler {
     public ResponseEntity<ShortUrlResponse> handleAuthorizationErrorException(AuthorizationErrorException e) {
         ShortUrlResponse error = new ShortUrlResponse();
         error.setDescription(e.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(HeaderErrorException.class)

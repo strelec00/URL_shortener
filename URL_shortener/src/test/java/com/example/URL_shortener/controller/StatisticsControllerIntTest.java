@@ -4,6 +4,7 @@ import com.example.URL_shortener.models.Account;
 import com.example.URL_shortener.models.URL;
 import com.example.URL_shortener.services.AccountService;
 import com.example.URL_shortener.services.URLshorteningService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class StatisticsControllerIntTest {
 
     @Autowired
@@ -65,7 +67,7 @@ class StatisticsControllerIntTest {
         mockMvc.perform(get("/administration/statistics")
                         .header("Authorization", authorizationHeader)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isUnauthorized());
     }
 
 }

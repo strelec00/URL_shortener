@@ -4,6 +4,7 @@ import com.example.URL_shortener.exceptions.URLnotFoundException;
 import com.example.URL_shortener.models.URL;
 import com.example.URL_shortener.models.URLrequest;
 import com.example.URL_shortener.services.URLshorteningService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class RedirectionControllerIntTest {
 
     @Autowired

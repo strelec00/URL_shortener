@@ -5,6 +5,7 @@ import com.example.URL_shortener.models.URLrequest;
 import com.example.URL_shortener.services.AccountService;
 import com.example.URL_shortener.services.URLshorteningService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class URLshorteningControllerIntTest {
 
     @Autowired
@@ -65,15 +67,16 @@ class URLshorteningControllerIntTest {
     @Test
     void URLshorteningControllerInt_shortenURL_unauthorized() throws Exception {
         URLrequest urlRequest = new URLrequest();
-        urlRequest.setUrl("http://example.com");
+        urlRequest.setUrl("https://example.com");
         urlRequest.setRedirectType(301);
 
         String jsonRequest = objectMapper.writeValueAsString(urlRequest);
 
         mockMvc.perform(post("/administration/short")
+                        .header("Authorization", "fakeAuthorization")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test

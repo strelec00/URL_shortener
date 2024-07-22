@@ -1,6 +1,8 @@
 package com.example.URL_shortener.repository;
 
 import com.example.URL_shortener.models.Account;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
+@Transactional
 class RestRepositoryAccountUnitTest {
 
     @Autowired
@@ -22,6 +25,10 @@ class RestRepositoryAccountUnitTest {
         restRepository.save(account);
     }
 
+    @AfterEach
+    void tearDown() {
+        restRepository.deleteAll(); // Clean up after each test
+    }
 
     @Test
     void AccRepositoryUnit_FindByAccountIdAndPassword_returnAcc() {

@@ -52,7 +52,7 @@ public class AccountServiceImpl implements AccountService {
     public String[] authenticate(String authorization) {
 
         if (!authorization.startsWith("Basic ")) {
-            throw new HeaderErrorException("Invalid Authorization header value");
+            throw new AuthorizationErrorException("This is not a valid authorization");
         }
 
         String encodedAuthorization = authorization.substring(6).trim();

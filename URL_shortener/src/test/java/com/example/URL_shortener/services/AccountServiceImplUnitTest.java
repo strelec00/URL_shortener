@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.example.URL_shortener.exceptions.HeaderErrorException;
 import com.example.URL_shortener.models.Account;
 import com.example.URL_shortener.repository.RestRepositoryAccount;
+import jakarta.transaction.Transactional;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Transactional
 class AccountServiceImplUnitTest {
 
     @Mock
@@ -133,13 +135,13 @@ class AccountServiceImplUnitTest {
     }
 
     @Test
-    void AccountServiceUnit_Authenticate_AuthNotStartWithBasic_ThrowsHeaderErrorException() {
+    void AccountServiceUnit_Authenticate_AuthNotStartWithBasic_ThrowsAuthorizationErrorException() {
         String invalidAuthorization = " " + Base64.encodeBase64String("invalidUsername:invalidPassword".getBytes());
 
 
         assertThatThrownBy(() -> accountService.authenticate(invalidAuthorization))
-                .isInstanceOf(HeaderErrorException.class)
-                .hasMessageContaining("Invalid Authorization header value");
+                .isInstanceOf(AuthorizationErrorException.class)
+                .hasMessageContaining("This is not a valid authorization");
     }
 
     @Test

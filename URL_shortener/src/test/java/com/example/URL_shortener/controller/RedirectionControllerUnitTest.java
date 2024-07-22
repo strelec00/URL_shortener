@@ -3,6 +3,7 @@ package com.example.URL_shortener.controller;
 import com.example.URL_shortener.exceptions.URLnotFoundException;
 import com.example.URL_shortener.models.URL;
 import com.example.URL_shortener.services.URLshorteningService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Transactional
 class RedirectionControllerUnitTest {
 
     @Mock
@@ -40,7 +42,7 @@ class RedirectionControllerUnitTest {
         when(urlshorteningService.generateURL()).thenReturn(generatedUrl);
         when(urlshorteningService.getURLbyShortUrl(shortUrl)).thenReturn(redirectUrl);
 
-        ResponseEntity<Void> responseEntity = redirectionController.redirect(hash);
+        ResponseEntity<?> responseEntity = redirectionController.redirect(hash);
 
         assertNotNull(responseEntity);
         assertEquals(redirectUrl.getRedirectType(), responseEntity.getStatusCodeValue());

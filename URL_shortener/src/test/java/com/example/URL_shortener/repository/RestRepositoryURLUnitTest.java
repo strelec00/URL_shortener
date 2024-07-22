@@ -1,6 +1,8 @@
 package com.example.URL_shortener.repository;
 
 import com.example.URL_shortener.models.URL;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 @DataJpaTest
+@Transactional
 class RestRepositoryURLUnitTest {
 
     @Autowired
@@ -24,6 +27,11 @@ class RestRepositoryURLUnitTest {
         // given
         URL urlBase = new URL("name","www.google.com","google", 303);
         restRepositoryURL.save(urlBase);
+    }
+
+    @AfterEach
+    void tearDown() {
+        restRepositoryURL.deleteAll(); // Clean up after each test
     }
 
     @Test

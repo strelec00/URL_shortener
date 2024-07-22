@@ -2,6 +2,7 @@ package com.example.URL_shortener.controller;
 
 import com.example.URL_shortener.services.AccountService;
 import com.example.URL_shortener.services.URLshorteningService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Transactional
 class StatisticsControllerUnitTest {
 
     @Mock

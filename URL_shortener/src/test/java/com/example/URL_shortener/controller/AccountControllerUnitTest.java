@@ -4,6 +4,7 @@ import com.example.URL_shortener.exceptions.RegisterErrorException;
 import com.example.URL_shortener.models.AccountId;
 import com.example.URL_shortener.responses.RegisterResponse;
 import com.example.URL_shortener.services.AccountService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@Transactional
 class AccountControllerUnitTest {
 
     @Mock
