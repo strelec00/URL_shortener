@@ -4,7 +4,6 @@ import com.example.URL_shortener.models.URL;
 import com.example.URL_shortener.models.URLrequest;
 import com.example.URL_shortener.repository.RestRepositoryURL;
 import com.example.URL_shortener.responses.ShortUrlResponse;
-import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +16,6 @@ import java.util.Map;
 public class URLshorteningServiceImpl implements URLshorteningService {
 
     private final RestRepositoryURL repositoryURL;
-    private final RestRepositoryURL restRepositoryURL;
 
     @Value("${server.address:localhost}")
     private String serverAddress;
@@ -32,9 +30,8 @@ public class URLshorteningServiceImpl implements URLshorteningService {
     private String contextPath;
 
 
-    public URLshorteningServiceImpl(RestRepositoryURL repositoryURL, RestRepositoryURL restRepositoryURL) {
+    public URLshorteningServiceImpl(RestRepositoryURL repositoryURL) {
         this.repositoryURL = repositoryURL;
-        this.restRepositoryURL = restRepositoryURL;
     }
 
     @Override
@@ -49,7 +46,7 @@ public class URLshorteningServiceImpl implements URLshorteningService {
         String hash = generateRandomHash(4);
 
 
-        String shortUrl =  scheme + "://" + serverAddress + ":" + port + contextPath + "/" + hash;
+        String shortUrl =  generateURL() + hash;
 
         response.setShortUrl(shortUrl);
 
@@ -58,8 +55,7 @@ public class URLshorteningServiceImpl implements URLshorteningService {
 
     @Override
     public String generateURL() {
-        String generatedUrl =  scheme + "://" + serverAddress + ":" + port + contextPath + "/";
-        return generatedUrl;
+        return scheme + "://" + serverAddress + ":" + port + contextPath + "/";
     }
 
     public void addURL(URL url) {
@@ -92,7 +88,7 @@ public class URLshorteningServiceImpl implements URLshorteningService {
 
     @Override
     public URL getURLbyShortUrl(String shortUrl) {
-        return restRepositoryURL.findByShortenedUrl(shortUrl);
+        return repositoryURL.findByShortenedUrl(shortUrl);
     }
 
 

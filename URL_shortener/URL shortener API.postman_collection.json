@@ -1,0 +1,270 @@
+{
+	"info": {
+		"_postman_id": "64d1ff28-8811-46a5-82e4-eff2d1df30cd",
+		"name": "URL shortener API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37157019"
+	},
+	"item": [
+		{
+			"name": "Register01 - /administration/register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accountId\" : \"jan07\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/administration/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"administration",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register02 - /administration/register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accountId\" : \"borna01\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/administration/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"administration",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shorting01 - /administration/short",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "jan07",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "RLeNbFRyqn5u",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"http://localhost:8080/swagger-ui/index.html#/Redirection/redirect\",\n    \"redirectType\" : null\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/administration/short",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"administration",
+						"short"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shorting02 - /administration/short",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "VfWV7CM6tF1k",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "borna01",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"http://soothingsilverrelaxedmelody.neverssl.com/online/\",\n    \"redirectType\" : 301\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/administration/short",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"administration",
+						"short"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Statistics01 - /administration/statistics",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "RLeNbFRyqn5u",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "jan07",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/administration/statistics",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"administration",
+						"statistics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Statistics02 - /administration/statistics",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "VfWV7CM6tF1k",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "borna01",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/administration/statistics",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"administration",
+						"statistics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Redirection01 - /:hash",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/xeDY",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"xeDY"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Redirection02 - /:hash",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/n0M4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"n0M4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

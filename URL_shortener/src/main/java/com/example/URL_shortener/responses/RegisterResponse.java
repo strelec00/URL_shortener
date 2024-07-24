@@ -10,6 +10,10 @@ public class RegisterResponse {
 
     private String password;
 
+    public RegisterResponse() {
+
+    }
+
     public RegisterResponse(boolean success, String description) {
         this.success = success;
         this.description = description;
