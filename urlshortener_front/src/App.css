@@ -1,0 +1,13 @@
+.App {
+    font-family: Arial, sans-serif;
+  }
+  
+  header, footer, .container {
+    margin: 0 auto;
+    width: auto;
+  }
+
+  body{
+    background-color: #c0c0bf;
+  }
+  

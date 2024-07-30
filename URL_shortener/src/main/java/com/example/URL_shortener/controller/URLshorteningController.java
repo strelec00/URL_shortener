@@ -59,6 +59,6 @@ public class URLshorteningController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(shortUrlResponse);
         }
 
-        return new ResponseEntity<>(shortUrlResponse, HttpStatus.valueOf(redirectType));
+        return new ResponseEntity<>(shortUrlResponse, HttpStatus.OK);
     }
 }
