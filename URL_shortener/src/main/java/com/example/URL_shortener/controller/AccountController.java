@@ -7,10 +7,6 @@ import com.example.URL_shortener.responses.RegisterResponse;
 import com.example.URL_shortener.services.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -45,5 +41,15 @@ public class AccountController {
         accountService.createAccount(account);
 
         return new RegisterResponse(account.getPassword(), true);
+    }
+
+    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+    public boolean loginRegister(@RequestBody Account account) {
+        Account accountExist = accountService.checkAuthorization(account.getAccountId(), account.getPassword());
+
+        if (accountExist == null) {
+            throw new RegisterErrorException("Account does not exist!");
+        }
+        return true;
     }
 }
