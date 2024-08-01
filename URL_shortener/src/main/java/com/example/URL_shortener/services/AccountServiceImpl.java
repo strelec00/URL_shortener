@@ -40,13 +40,9 @@ public class AccountServiceImpl implements AccountService {
     }
     @Override
     public Account checkAuthorization(String accountId, String password) {
-        Account account = restRepository.findByAccountIdAndPassword(accountId, password);
-        if (account == null) {
-            throw new AuthorizationErrorException("You are not authorized to have access to URL shortening");
-        }
-        return account;
-    }
 
+        return restRepository.findByAccountIdAndPassword(accountId, password);
+    }
 
     @Override
     public String[] authenticate(String authorization) {
@@ -67,6 +63,9 @@ public class AccountServiceImpl implements AccountService {
         // error handling - provjera autorizacije
         Account account = checkAuthorization(credentials[0], credentials[1]);
 
+        if (account == null) {
+            throw new AuthorizationErrorException("You are not authorized to have access to URL shortening");
+        }
         return credentials;
 
     }

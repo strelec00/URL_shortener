@@ -1,5 +1,6 @@
 package com.example.URL_shortener.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,7 +19,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(String accountId, String password) {
+    public Account(@JsonProperty("accountId") String accountId, @JsonProperty("password") String password) {
         this.accountId = accountId;
         this.password = password;
     }
